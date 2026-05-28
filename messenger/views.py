@@ -81,13 +81,11 @@ def login(request):
     if request.method == "POST":
         name = request.POST.get("name", "")
         password = request.POST.get("password", "")
-        # from django.contrib.auth import authenticate, login as django_login
-        # user = authenticate(request, username=name, password=password)
-        # if user is not None:
-        #     django_login(request, user)
-        #     return redirect('conversations')
-        # else:
-        #     error = 'Invalid credentials'
+        # FIX: from django.contrib.auth import authenticate, login as django_login
+        #      user = authenticate(request, username=name, password=password)
+        #      if user is not None:
+        #          django_login(request, user)
+        #          return redirect('conversations')
 
         user = user_manager.filter(name=name, password=password).first()
 
@@ -110,15 +108,20 @@ def register(request):
     if request.method == "POST":
         name = request.POST["name"]
         password = request.POST["password"]
-        # isadmin = False
-        # current_user = get_current_user(request)
-        # if current_user and current_user.isadmin and request.POST.get('isadmin') == 'true':
-        #     isadmin = True
+        # FIX: from django.contrib.auth.password_validation import validate_password
+        #      try:
+        #          validate_password(password)
+        #      except ValidationError as e:
+        #          error = str(e)
+        #          return render(request, 'messenger/register.html', {'error': error})
+        # FIX: if User.objects.filter(name=name).exists():
+        #          error = 'Username already exists'
+        #          return render(request, 'messenger/register.html', {'error': error})
 
         isadmin = False
 
-        # from django.contrib.auth.hashers import make_password
-        # hashed = make_password(password)
+        # FIX: from django.contrib.auth.hashers import make_password
+        #      hashed = make_password(password)
 
         next_id = (User.objects.aggregate(Max("user_id"))["user_id__max"] or 0) + 1
 
@@ -160,6 +163,8 @@ def conversation(request, user_id):
     if current_user is None:
         return redirect("login")
 
+    # FIX: if current_user.user_id != user_id:
+    #          return redirect("conversations")
     recipient = User.objects.filter(user_id=user_id).first()
     if recipient is None:
         return redirect("conversations")
@@ -167,7 +172,10 @@ def conversation(request, user_id):
     if request.method == "POST":
         message_text = request.POST.get("message", "").strip()
         if message_text:
-            #vulnerability: race condition allowing duplicate msg_id values
+            #from django.db import transaction
+            #   with transaction.atomic():
+            #      msg_id_obj = Message.objects.select_for_update().aggregate(Max("msg_id"))
+            #      next_msg_id = (msg_id_obj["msg_id__max"] or 0) + 1
             next_msg_id = (Message.objects.aggregate(Max("msg_id"))["msg_id__max"] or 0) + 1
             Message.objects.create(
                 user=current_user,
