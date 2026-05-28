@@ -1,0 +1,53 @@
+{% extends "messenger/index.html" %}
+
+{% block title %}Conversations{% endblock %}
+
+{% block content %}
+  <style>
+    .active { background:rgb(92, 92, 207); }
+    .list { list-style:none;padding:0;margin:0 0 1em 0; }
+    .item { padding:.5em;border-bottom:1px solid #ddd; }
+  </style>
+
+  <p>Logged in as {{ current_user.name }} (ID: {{ current_user.user_id }})</p>
+  <p>
+    <a href="{% url 'logout' %}">Logout</a>
+  </p>
+
+  {% if current_user.isadmin %}
+    <h1>All conversations</h1>
+    <ul class="list">
+      {% for thread in conversation_threads %}
+        <li class="item">
+          <a href="{{ thread.url }}">{{ thread.participant_a.name }} and {{ thread.participant_b.name }}</a>
+          <small>({{ thread.message_count }} messages, latest {{ thread.latest_message.pub_date|date:"Y-m-d H:i" }})</small>
+        </li>
+      {% empty %}
+        <li class="item">No conversations yet.</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <h1>Available users</h1>
+    <ul class="list">
+      {% for user in users %}
+        <li class="item">
+          <a href="{% url 'conversation' user.user_id %}">{{ user.name }}</a>
+          {% if user.isadmin %}<small> (admin)</small>{% endif %}
+        </li>
+      {% empty %}
+        <li class="item">No other users available.</li>
+      {% endfor %}
+    </ul>
+
+    <h1>Active conversations</h1>
+    <ul class="list">
+      {% for conv in conversations %}
+        <li class="item {% if active_conversation and conv.id == active_conversation.id %}active{% endif %}">
+          <a href="#">Conversation {{ conv.id }}</a>
+        </li>
+      {% empty %}
+        <li class="item">No active conversations.</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}

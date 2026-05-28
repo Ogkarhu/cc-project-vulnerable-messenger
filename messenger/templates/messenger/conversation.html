@@ -1,0 +1,47 @@
+{% extends "messenger/index.html" %}
+
+{% block title %}{{ conversation_title|default:"Conversation" }}{% endblock %}
+
+{% block content %}
+    <h1>{{ conversation_title|default:"Conversation" }}</h1>
+    <p>Logged in as {{ current_user.name }} (ID: {{ current_user.user_id }})</p>
+
+    {% if participants %}
+        <p>
+            Participants:
+            {% for participant in participants %}
+                {{ participant.name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    {% endif %}
+
+    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 20px; height: 300px; overflow-y: auto;">
+        {% for message in messages %}
+            <div style="margin-bottom: 10px; padding: 5px; border-bottom: 1px solid #eee;">
+                <strong>{{ message.user.name }}:</strong> {{ message.message }}
+                <small style="color: #999;">{{ message.pub_date|date:"Y-m-d H:i" }}</small>
+            </div>
+        {% empty %}
+            <p>No messages yet. Start the conversation!</p>
+        {% endfor %}
+    </div>
+
+    {% if allow_message_form %}
+        <form method="POST" style="margin-top: 20px;">
+            {% csrf_token %}
+            <label>Message:</label>
+            <br>
+            <textarea name="message" rows="4" cols="50" required></textarea>
+            <br>
+            <button type="submit">Send</button>
+        </form>
+    {% endif %}
+
+    <p>
+        {% if back_url %}
+            <a href="{{ back_url }}">{{ back_label|default:"Back to conversations" }}</a>
+        {% else %}
+            <a href="{% url 'conversations' %}">Back to conversations</a>
+        {% endif %}
+    </p>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "messenger/index.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+    <h1>Create User</h1>
+    {% if logged_in %}
+        <p>You are already logged in as {{ current_user.name }}.</p>
+        <p><a href="{% url 'conversations' %}">Go to conversations</a></p>
+    {% else %}
+        <form method="POST">
+            {% csrf_token %}
+            <label>Name:</label>
+            <input type="text" name="name" required>
+            <br>
+            <label>Password</label>
+            <input type="password" name="password" required>
+            <br>
+                        <input type="hidden" name="isadmin" value="false">
+                        <!--
+                        isadmin = False
+                        current_user = get_current_user(request)
+                        if current_user and current_user.isadmin and request.POST.get('isadmin') == 'true':
+                            isadmin = True
+                        -->
+            <button type="submit">Create User</button>
+        </form>
+
+        <h2>Users</h2>
+        <ul>
+        {% for user in users %}
+            <li>{{ user.name }} (ID: {{ user.user_id }}) {% if user.isadmin %}[ADMIN]{% endif %}</li>
+        {% empty %}
+            <li>No users yet</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
