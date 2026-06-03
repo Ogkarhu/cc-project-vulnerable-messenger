@@ -16,13 +16,8 @@
             <label>Password</label>
             <input type="password" name="password" required>
             <br>
-                        <input type="hidden" name="isadmin" value="false">
-                        <!--
-                        isadmin = False
-                        current_user = get_current_user(request)
-                        if current_user and current_user.isadmin and request.POST.get('isadmin') == 'true':
-                            isadmin = True
-                        -->
+                <!--this should not be here at all. Admin should be added with the install script only -->
+                <input type="hidden" name="isadmin" value="false">
             <button type="submit">Create User</button>
         </form>
 

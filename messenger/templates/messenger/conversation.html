@@ -19,7 +19,7 @@
         {% for message in messages %}
             <div style="margin-bottom: 10px; padding: 5px; border-bottom: 1px solid #eee;">
                 <!-- {{ message.user.name|escape }}: {{ message.message|escape }} -->
-                <strong>{{ message.user.name }}:</strong> {{ message.message }}
+                <strong>{{ message.user.name |safe}}:</strong> {{ message.message |safe}}
                 <small style="color: #999;">{{ message.pub_date|date:"Y-m-d H:i" }}</small>
             </div>
         {% empty %}

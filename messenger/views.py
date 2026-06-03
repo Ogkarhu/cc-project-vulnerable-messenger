@@ -172,10 +172,6 @@ def conversation(request, user_id):
     if request.method == "POST":
         message_text = request.POST.get("message", "").strip()
         if message_text:
-            #from django.db import transaction
-            #   with transaction.atomic():
-            #      msg_id_obj = Message.objects.select_for_update().aggregate(Max("msg_id"))
-            #      next_msg_id = (msg_id_obj["msg_id__max"] or 0) + 1
             next_msg_id = (Message.objects.aggregate(Max("msg_id"))["msg_id__max"] or 0) + 1
             Message.objects.create(
                 user=current_user,
@@ -230,4 +226,5 @@ def admin_conversation(request, user_a_id, user_b_id):
     return render(request, 'messenger/conversation.html', context)
 
 
-
+def obscure_very_secret_admin_page(request):
+    return render(request, 'messenger/obscure_very_secret_admin_page.html', auth_context(request))

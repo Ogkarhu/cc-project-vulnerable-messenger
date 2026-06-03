@@ -11,5 +11,6 @@ urlpatterns = [
     path('conversation/<int:user_id>/', views.conversation, name='conversation'),
     path('conversations/admin/<int:user_a_id>/<int:user_b_id>/', views.admin_conversation, name='admin_conversation'),
     path('logout/', views.logout, name='logout'),
+    path('obscure_very_secret_admin_page/', views.obscure_very_secret_admin_page, name='obscure_very_secret_admin_page'),
 ]
 
