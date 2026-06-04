@@ -100,6 +100,8 @@ def login(request):
     context["error"] = error
     return render(request, 'messenger/login.html', context)
 
+# FIX: the line below just should not exist.
+@csrf_exempt
 def register(request):
     current_user = get_current_user(request)
     if current_user:
