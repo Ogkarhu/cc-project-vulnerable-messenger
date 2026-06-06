@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
 from .models import User, Message
+# the line below just should not exist.
+from django.views.decorators.csrf import csrf_exempt
 
 
 user_manager = getattr(User, 'objects')
