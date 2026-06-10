@@ -31,7 +31,11 @@ Run The App:
 ---------------------------------------------------------------------------
 
 FLAW 1:
-https://github.com/Ogkarhu/cc-project-vulnerable-messenger/blob/main/messenger/views.py#L110
+https://github.com/Ogkarhu/cc-project-vulnerable-messenger/blob/main/messenger/views.py#L67
+https://github.com/Ogkarhu/cc-project-vulnerable-messenger/blob/main/messenger/views.py#L69
+https://github.com/Ogkarhu/cc-project-vulnerable-messenger/blob/main/messenger/views.py#L125
+
+
 
 
 A02 cryptographic failures Plaintext passwords

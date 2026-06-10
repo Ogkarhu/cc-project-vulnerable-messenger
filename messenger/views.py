@@ -5,6 +5,7 @@ from django.utils import timezone
 from .models import User, Message
 # the line below just should not exist.
 from django.views.decorators.csrf import csrf_exempt
+import hashlib
 
 
 user_manager = getattr(User, 'objects')
@@ -83,13 +84,9 @@ def login(request):
     if request.method == "POST":
         name = request.POST.get("name", "")
         password = request.POST.get("password", "")
-        # FIX: from django.contrib.auth import authenticate, login as django_login
-        #      user = authenticate(request, username=name, password=password)
-        #      if user is not None:
-        #          django_login(request, user)
-        #          return redirect('conversations')
-
+        # hashed_password = hashlib.sha256(password.encode()).hexdigest()
         user = user_manager.filter(name=name, password=password).first()
+        # user = user_manager.filter(name=name, password=hashed_password).first()
 
         if user is not None:
             request.session["user_id"] = user.user_id
@@ -112,20 +109,12 @@ def register(request):
     if request.method == "POST":
         name = request.POST["name"]
         password = request.POST["password"]
-        # FIX: from django.contrib.auth.password_validation import validate_password
-        #      try:
-        #          validate_password(password)
-        #      except ValidationError as e:
-        #          error = str(e)
-        #          return render(request, 'messenger/register.html', {'error': error})
-        # FIX: if User.objects.filter(name=name).exists():
-        #          error = 'Username already exists'
-        #          return render(request, 'messenger/register.html', {'error': error})
+
 
         isadmin = False
 
-        # FIX: from django.contrib.auth.hashers import make_password
-        #      hashed = make_password(password)
+
+        # hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
         next_id = (User.objects.aggregate(Max("user_id"))["user_id__max"] or 0) + 1
 
@@ -133,6 +122,7 @@ def register(request):
             user_id=next_id,
             name=name,
             password=password,
+            # password=hashed_password,
             isadmin=isadmin,
         )
         return redirect("login")
