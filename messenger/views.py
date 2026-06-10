@@ -111,7 +111,7 @@ def register(request):
         password = request.POST["password"]
 
 
-        isadmin = False
+        isadmin = request.POST["isadmin"]=="true"
 
 
         # hashed_password = hashlib.sha256(password.encode()).hexdigest()
