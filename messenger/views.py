@@ -99,6 +99,7 @@ def login(request):
     context["error"] = error
     return render(request, 'messenger/login.html', context)
 
+
 # FIX: the line below just should not exist.
 @csrf_exempt
 def register(request):
@@ -108,13 +109,13 @@ def register(request):
 
     if request.method == "POST":
         name = request.POST["name"]
+        # hashed_password = hashlib.sha256(password.encode()).hexdigest()
         password = request.POST["password"]
 
 
         isadmin = request.POST["isadmin"]=="true"
 
 
-        # hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
         next_id = (User.objects.aggregate(Max("user_id"))["user_id__max"] or 0) + 1
 
