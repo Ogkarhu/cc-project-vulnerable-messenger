@@ -15,3 +15,4 @@ ADMIN_USERNAME="admin"
 ADMIN_PASSWORD="admin"
  
 "$PY" manage.py shell -c "from messenger.models import User; User.objects.get_or_create(name='$ADMIN_USERNAME', defaults={'password': '$ADMIN_PASSWORD', 'isadmin': True})"
+echo "Admin user created with username '$ADMIN_USERNAME' and password '$ADMIN_PASSWORD'."
