@@ -113,6 +113,7 @@ def register(request):
         password = request.POST["password"]
 
 
+        # isadmin = False
         isadmin = request.POST["isadmin"]=="true"
 
 
